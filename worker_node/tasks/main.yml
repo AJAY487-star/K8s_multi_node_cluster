@@ -1,0 +1,58 @@
+---
+# tasks file for worker.yml
+
+- name: "Installing docker"
+  package:
+          name: docker
+          state: present
+
+- name: "starting service of docker"
+  service:
+          name: docker
+          state: started
+          enabled: yes
+
+- name: "configuring yum for downloading kubeadm"
+  yum_repository:
+          name: kubernetes
+          baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+          description: worker node configuration
+          enabled: 1
+          gpgcheck: 1
+          repo_gpgcheck: 1
+          gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+- name: "Installing Softwares"
+  package: 
+    name: [ 'kubeadm','kubelet','kubectl']
+    state: present
+- name: "starting service of kubelet"
+  service:
+          name: kubelet
+          state: started
+          enabled: yes
+- name: "changing cgroup driver"
+  copy:
+          src: daemon.json
+          dest: /etc/docker
+- name: "restarting docker service"
+  service:
+          name: docker
+          state: restarted
+- name: "installing software iproute"
+  package:
+          name: iproute-tc
+          state: present
+- name: "running sysctl command"
+  command: sysctl --system
+- name: "setting up iptables"
+  shell: "echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables"
+- name: "copying token to slave"
+  copy:
+          src: slave_token.sh
+          dest: /root
+          mode: 0777
+- name: "running token file"
+  command: "sh /root/slave_token.sh"
+          
+         

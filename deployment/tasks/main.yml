@@ -1,0 +1,8 @@
+---
+# tasks file for deployment
+
+- name: "creating deployment"
+  command: "kubectl create deploy myd --image=httpd"
+
+- name: "expsing deployment"
+  command: "kubectl expose deploy myd --port=80 --type=NodePort"

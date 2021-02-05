@@ -1,0 +1,10 @@
+- hosts: tag_name_Master_Node
+  roles:
+  - role: master
+
+- hosts: tag_name_Worker_Node
+  roles:
+  - role: worker_node
+- hosts: tag_name_Master_Node
+  roles:
+  - role: deployment 

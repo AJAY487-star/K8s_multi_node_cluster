@@ -1,0 +1,4 @@
+---
+# vars file for master
+
+tok: slave_token.sh
