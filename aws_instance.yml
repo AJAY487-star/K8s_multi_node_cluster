@@ -1,0 +1,26 @@
+- hosts: localhost
+  tasks:
+
+   - name: "launching master instances on aws cloud"
+     ec2:
+          key_name: helloWorld
+          instance_type: t2.micro
+          image: ami-08e0ca9924195beba
+          count: 1
+          vpc_subnet_id: subnet-e19ea489
+          assign_public_ip: yes
+          instance_tags:
+                  name: "Master_Node"
+          group_id: sg-0864778ea8f6bf501
+
+   - name: "launching Worker Node"
+     ec2:
+          key_name: helloWorld
+          instance_type: t2.micro
+          image: ami-08e0ca9924195beba
+          count: 2
+          vpc_subnet_id: subnet-e19ea489
+          assign_public_ip: yes
+          instance_tags:
+                  name: "Worker_Node"
+          group_id: sg-0864778ea8f6bf501
